@@ -42,7 +42,17 @@
     $first['id'] = $count + 1;
     $ans_all = $first['id'];
     //echo '現在の回答数は、'.$first['id'].'件です。<br />';
+
+    $event = $first['event'];
+    $event_name = $first['event_name'];
+    $event_no = $first['event_no'];
     
+    if($event_no < 10){
+        $event_no = "0".strval($event_no);
+    }else{
+        $event_no = strval($event_no);
+    }
+
 
     $second = array(
         "omoide" => $omoide,
@@ -57,6 +67,20 @@
     //var_dump( $json_add );
     //echo '<br />';
     //書き込み用json完成
+
+    $eve_c = 0;
+    $comment = "";
+    $count = 0;
+    while($count < $ans_all){
+        if($last_d["Olympic_Winter_Games"][$count]["event_no"] == $event_no){
+            $eve_c += 1;
+            $comment = $comment."<br>".$last_d["Olympic_Winter_Games"][$count]["omoide"];
+        }
+        $count += 1;
+    }
+    $eve_c += 1;
+    $comment = $comment."<br>".$second["omoide"];
+
     
     $json_mrg = array_merge($last_d["Olympic_Winter_Games"], array($json_add));
     $json_orig = array(
@@ -81,8 +105,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result</title>
+    <link rel='stylesheet' href='css/reset.css'>
+    <link rel='stylesheet' href='css/format.css'>
 </head>
 <body>
-    <h2>現在の回答数は、<?= $ans_all; ?>件です。</h2>
+    <div class="result">
+        <h2>現在の回答数は、<?= $ans_all; ?>件です。<br>
+        <?= $event_name; ?>を選んだ回答は、<?= $eve_c; ?>件です。<br>
+        </h2>
+        <img src="img/<?= $event; ?>.png" alt="test" class="ans_img"><br>
+        
+        <h3>こんな思い出の回答をもらっています。</h3>
+        <div class="com_oya">
+            <p class="comment"><?= $comment; ?></p>
+        </div>
+
+        <h3><?= $event_name; ?>の気になる記事は、こちらからチェック！<br>
+        <a href="https://www3.nhk.or.jp/news/special/beijing2022/latest-news/<?= $event_no; ?>/">リンク先（NHK）</a>
+        </h3>
+    </div>
 </body>
 </html>
